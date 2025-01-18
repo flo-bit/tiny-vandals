@@ -7,4 +7,5 @@ export type Props = {
   clock: THREE.Clock;
   delta: number;
   total: number;
+  texture: HTMLCanvasElement | null;
 };

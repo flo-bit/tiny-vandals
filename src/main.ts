@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { setup, update } from "./scene";
 import { createTinyVandalsWall, updateTinyVandalsWall } from "./pixi-app";
+import { Props } from "./types";
 
 (async () => {
   const scene = new THREE.Scene();
@@ -29,29 +30,23 @@ import { createTinyVandalsWall, updateTinyVandalsWall } from "./pixi-app";
 
   const clock = new THREE.Clock();
 
-  const props = {
+  const props: Props = {
     scene,
     camera,
     renderer,
     clock,
     delta: 0,
     total: 0,
+    texture: null,
   };
-
-  // add a cube to the threejs scene
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    side: THREE.DoubleSide,
-  });
-  const cube = new THREE.Mesh(new THREE.PlaneGeometry(2, 1), material);
-  cube.position.z = -2;
-  scene.add(cube);
 
   const wall = await createTinyVandalsWall({});
 
-  // set texture of the cube to be the pixijs canvas
-  const texture = new THREE.CanvasTexture(wall.app.canvas);
-  material.map = texture;
+  props.texture = wall.app.canvas;
+
+  // // set texture of the cube to be the pixijs canvas
+  // const texture = new THREE.CanvasTexture(wall.app.canvas);
+  // material.map = texture;
 
   await setup(props);
 
@@ -61,19 +56,16 @@ import { createTinyVandalsWall, updateTinyVandalsWall } from "./pixi-app";
     props.delta = clock.getDelta();
     props.total = clock.getElapsedTime();
 
+    // render the pixijs canvas
+    wall.app.render();
+
     await update(props);
     await updateTinyVandalsWall(wall);
-
-    // rotate the cube
-    cube.rotation.y += props.delta;
 
     // render the scene
     renderer.render(scene, camera);
 
-    // render the pixijs canvas
-    wall.app.render();
-
-    texture.needsUpdate = true;
+    // texture.needsUpdate = true;
   };
 
   let isPixi = true;
