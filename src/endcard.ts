@@ -7,5 +7,5 @@ type EndcardInfo = {
     }[],
 };
 
-export async function showEndcard(info: EndcardInfo) {
+export function showEndcard(info: EndcardInfo) {
 }
