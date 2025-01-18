@@ -61,7 +61,7 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
     const loader = new GLTFLoader();
     try {
         const gltf = await loader.loadAsync(
-            "/tiny-vandals/map/MuseumMapV6.glb",
+            "/tiny-vandals/map/MuseumMapV7.glb",
         );
         museumMap = gltf.scene;
 

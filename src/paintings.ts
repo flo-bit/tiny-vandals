@@ -6,6 +6,7 @@ const paintingData = [
         y: 600,
         width: 768 / 2,
         height: 1087 / 2,
+        border: 10,
         image: "/tiny-vandals/paintings/banksy.jpg",
     },
     {
@@ -13,6 +14,7 @@ const paintingData = [
         y: 600,
         width: 512,
         height: 512,
+        border: 10,
         image: "/tiny-vandals/paintings/mondrian.jpg",
     },
     {
@@ -20,6 +22,7 @@ const paintingData = [
         y: 600,
         width: 800,
         height: 947,
+        border: 10,
         image: "/tiny-vandals/paintings/girl-earing.jpg",
     },
     {
@@ -27,6 +30,7 @@ const paintingData = [
         y: 600,
         width: 640,
         height: 954,
+        border: 10,
         image: "/tiny-vandals/paintings/mona-lisa.jpg.webp",
     },
     {
@@ -34,6 +38,7 @@ const paintingData = [
         y: 600,
         width: 2140 / 4,
         height: 2699 / 4,
+        border: 10,
         image: "/tiny-vandals/paintings/nebelmeer.jpg",
     },
     {
@@ -41,6 +46,7 @@ const paintingData = [
         y: 600,
         width: 810 / 1.5,
         height: 1024 / 1.5,
+        border: 10,
         image: "/tiny-vandals/paintings/scream.jpg",
     },
     {
@@ -48,6 +54,7 @@ const paintingData = [
         y: 600,
         width: 1200,
         height: 950,
+        border: 10,
         image: "/tiny-vandals/paintings/starry-night.jpg",
     },
     {
@@ -55,6 +62,7 @@ const paintingData = [
         y: 600,
         width: 251 * 2,
         height: 251 * 2,
+        border: 10,
         image: "/tiny-vandals/paintings/willie.jpg",
     },
 ];
@@ -81,6 +89,19 @@ export const setupPaintings = async (
         container.addChild(sprite);
 
         paintings.push(sprite);
+
+        const graphic = new PIXI.Graphics();
+        graphic
+            .rect(
+                sprite.x - sprite.width / 2 - element.border,
+                sprite.y - sprite.height / 2 - element.border,
+                sprite.width + element.border * 2,
+                sprite.height + element.border * 2,
+            )
+            .fill(element.borderColor);
+
+        graphic.zIndex = -1;
+        container.addChild(graphic);
     }
 };
 
