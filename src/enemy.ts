@@ -1,7 +1,15 @@
 import * as PIXI from "pixi.js";
-const spiderTextures = [
-    await PIXI.Assets.load("/tiny-vandals/images/Monster1.png"),
+const monster1Textures = [
+    await PIXI.Assets.load("/tiny-vandals/images/Monster1-1.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-2.png"),
+    await PIXI.Assets.load("/tiny-vandals/images/Monster1-1attack.png"),
+    await PIXI.Assets.load("/tiny-vandals/images/Monster1-2attack.png"),
+];
+const monster2Textures = [
+    await PIXI.Assets.load("/tiny-vandals/images/Monster2-1.png"),
+    await PIXI.Assets.load("/tiny-vandals/images/Monster2-2.png"),
+    await PIXI.Assets.load("/tiny-vandals/images/Monster2-1attack.png"),
+    await PIXI.Assets.load("/tiny-vandals/images/Monster2-2attack.png"),
 ];
 
 const MONSTER_WALL_PADDING = 20;
@@ -10,7 +18,7 @@ export class Enemy extends PIXI.AnimatedSprite {
     fadeFrame: number | null = null;
 
     constructor(app: PIXI.Application, container: PIXI.Container) {
-        super(spiderTextures);
+        super(monster1Textures);
 
         this.loop = true;
         this.animationSpeed = 0.04;
