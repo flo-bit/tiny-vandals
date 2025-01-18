@@ -96,7 +96,7 @@ const start = async () => {
         stats.end();
 
         console.log(props.total);
-        if (props.total > 60) {
+        if (props.total > 30) {
             console.log("showing endcard");
             showEndcard({
                 paintings: getDamagePerPainting(),
