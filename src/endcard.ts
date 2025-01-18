@@ -25,28 +25,28 @@ export function showEndcard(info: EndcardInfo) {
                     <thead>
                         <tr>
                             <th>Artwork</th>
-                            <th>Estimated Damage (EUR)</th>
+                            <th style="text-align: right">Estimated Damage</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${info.paintings.map(painting => `
                             <tr>
                                 <td>${painting.name}</td>
-                                <td class="damage-amount">€${painting.damages.toLocaleString('de-DE')}</td>
+                                <td style="text-align: right">${painting.damages.toLocaleString('de-DE')}€</td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
 
                 <div class="total-damages">
-                    <p>Total Estimated Damages: <strong>€${totalDamages.toLocaleString('de-DE')}</strong></p>
+                    <p>Total Estimated Damages: <strong>${totalDamages.toLocaleString('de-DE')}€</strong></p>
                 </div>
             </section>
 
             <section class="signatures">
                 <div class="signature-block">
                     <div class="signature-line"></div>
-                    <p>Dr. Isabella von Kunstmann</p>
+                    <p>Dr. Isabella von Fröhlich</p>
                     <p class="title">Museum Director</p>
                 </div>
                 <div class="signature-block">
@@ -57,7 +57,6 @@ export function showEndcard(info: EndcardInfo) {
             </section>
 
             <footer class="report-footer">
-                <p>This report was generated automatically following the incident.</p>
                 <p>National Museum of Fine Arts</p>
             </footer>
         </div>
@@ -65,12 +64,20 @@ export function showEndcard(info: EndcardInfo) {
         <style>
             .damage-report {
                 position: absolute;
-                max-width: 800px;
+                width: 600px;
+                min-width: min(600px, 90vw);
+                max-width: 90vw;
+                min-height: min(400px, 90vh);
+                max-height: 90vh;
                 margin: 2rem auto;
                 padding: 2rem;
                 background: white;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 font-family: 'Times New Roman', serif;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                overflow-y: auto;
             }
 
             .report-header {
@@ -83,6 +90,7 @@ export function showEndcard(info: EndcardInfo) {
             .report-header h1 {
                 margin: 0 0 1rem;
                 font-size: 2rem;
+                text-transform: uppercase;
             }
 
             .report-date, .report-ref {
@@ -107,7 +115,7 @@ export function showEndcard(info: EndcardInfo) {
             }
 
             .damage-amount {
-                text-align: right;
+                text-align: left;
             }
 
             .total-damages {
