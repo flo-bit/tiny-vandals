@@ -1,6 +1,14 @@
 import * as PIXI from "pixi.js";
 
-const paintingData = [
+const paintingData: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    border: number;
+    borderColor?: number;
+    image: string;
+}[] = [
     {
         x: 1000,
         y: 600,
@@ -67,16 +75,13 @@ const paintingData = [
     },
 ];
 
-class Painting extends PIXI.Sprite {
+export class Painting extends PIXI.Sprite {
     damage: number = 0;
 }
 
 const paintings: Painting[] = [];
 
-export const setupPaintings = async (
-    app: PIXI.Application,
-    container: PIXI.Container,
-) => {
+export const setupPaintings = async (container: PIXI.Container) => {
     for (const element of paintingData) {
         const sprite = new Painting(await PIXI.Assets.load(element.image));
         sprite.x = element.x;
@@ -98,7 +103,7 @@ export const setupPaintings = async (
                 sprite.width + element.border * 2,
                 sprite.height + element.border * 2,
             )
-            .fill(element.borderColor);
+            .fill(element.borderColor ?? 0);
 
         graphic.zIndex = -1;
         container.addChild(graphic);

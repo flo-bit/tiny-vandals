@@ -31,7 +31,7 @@ export async function createTinyVandalsWall({
     container.scale.y = -1;
     app.stage.addChild(container);
 
-    await setupPaintings(app, container);
+    await setupPaintings(container);
 
     const enemies: Enemy[] = [new Enemy(app, container)];
 
@@ -48,7 +48,7 @@ export async function updateTinyVandalsWall(wall: TinyVandalsWall) {
     }
 }
 
-const drawDebugCircle = (x: number, y: number, color?: number) => {
+export const drawDebugCircle = (x: number, y: number, color?: number) => {
     if (!wall) return;
     const circle = new Graphics();
     circle.circle(x, wall.app.screen.height - y, 10).fill(color ?? 0xff0000);
@@ -62,7 +62,6 @@ export async function castRayAtTinyVandalsWall(xOnUV: number, yOnUV: number) {
     if (!wall) return;
     const x = xOnUV * wall.app.screen.width;
     const y = yOnUV * wall.app.screen.height;
-    drawDebugCircle(x, y);
 
     for (const enemy of wall.enemies) {
         enemy.checkRaycast(x, y);
