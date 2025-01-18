@@ -58,6 +58,7 @@ export function showEndcard(info: EndcardInfo) {
 
             <footer class="report-footer">
                 <p>National Museum of Fine Arts</p>
+                <p>National Museum of Fine Arts</p>
             </footer>
         </div>
 
