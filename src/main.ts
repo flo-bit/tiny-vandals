@@ -3,6 +3,7 @@ import { setup, update } from "./scene";
 import { createTinyVandalsWall, updateTinyVandalsWall } from "./pixi-app";
 import { Props } from "./types";
 import Stats from "stats.js";
+import { showEndcard } from "./endcard";
 
 (async () => {
     var stats = new Stats();
@@ -98,3 +99,14 @@ import Stats from "stats.js";
 
     animate();
 })();
+
+setTimeout(() => {
+    showEndcard({
+        paintings: [
+            {
+                name: "The Starry Night",
+                damages: 1000000,
+            },
+        ],
+    });
+}, 1000);
