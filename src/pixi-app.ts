@@ -60,7 +60,7 @@ export async function createTinyVandalsWall({
     container.scale.y = -1;
     app.stage.addChild(container);
 
-    setupPaintings(app, container);
+    await setupPaintings(app, container);
 
     const enemies: Enemy[] = [];
     for (let index = 0; index < 1; index++) {
@@ -81,7 +81,7 @@ export async function createTinyVandalsWall({
 
         // Center the sprite's anchor point
         sprite.anchor.set(0.5);
-        sprite.scale.set(0.128);
+        sprite.scale.set(0.5);
 
         // Move the sprite to the center of the screen
         sprite.x = enemy.x;
