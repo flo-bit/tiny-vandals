@@ -13,16 +13,6 @@ const spiderTextures = [
     await Assets.load("/tiny-vandals/images/Monster1.png"),
     await Assets.load("/tiny-vandals/images/Monster1-2.png")
 ];
-const paintingTextures = [
-    await Assets.load("/tiny-vandals/images/painting01.png"),
-    await Assets.load("/tiny-vandals/images/painting02.png"),
-    await Assets.load("/tiny-vandals/images/painting03.png"),
-];
-
-type Painting = {
-    damage: number;
-    sprite: Sprite;
-};
 
 type Enemy = {
     fadeFrame: number | null;
@@ -96,7 +86,7 @@ export async function createTinyVandalsWall({
     return wall;
 }
 
-const MONSTER_WALL_PADDING = 20;
+const MONSTER_WALL_PADDING = 40;
 
 export async function updateTinyVandalsWall(wall: TinyVandalsWall) {
     for (const enemy of wall.enemies) {
@@ -125,7 +115,7 @@ const drawDebugCircle = (x: number, y: number, color?: number) => {
     if (!wall) return;
     const circle = new Graphics();
     circle
-        .circle(x, y, 1)
+        .circle(x, y, 3)
         .fill(color ?? 0xff0000);
     wall.app.stage.addChild(circle);
 };
@@ -147,8 +137,7 @@ export async function castRayAtTinyVandalsWall(
             continue;
         }
         const dist = Math.sqrt((enemy.x - x) ** 2 + (enemy.y - y) ** 2);
-        if (dist < 30) {
-            console.log(x, y,)
+        if (dist < 128) {
             enemy.fadeFrame = 30;
             drawDebugCircle(x, y, 0x00ff00);
         }
