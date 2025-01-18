@@ -1,14 +1,6 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-
-export type Props = {
-  scene: THREE.Scene;
-  camera: THREE.PerspectiveCamera; // Or another camera type if you prefer
-  renderer: THREE.WebGLRenderer;
-  clock: THREE.Clock;
-  delta: number;
-  total: number;
-};
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { Props } from "./types";
 
 // State for movement/looking
 const keysPressed = { w: false, a: false, s: false, d: false };
@@ -39,6 +31,7 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
 
     console.log(museumMap);
     scene.add(museumMap);
+    // @ts-ignore
     museumMap.children[0].material = new THREE.MeshStandardMaterial({
       color: 0xf1f1f1,
       side: THREE.DoubleSide,
@@ -46,7 +39,9 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
 
     // museumMap.children[0].visible = false;
     // material.map = texture;
+    // @ts-ignore
     canvasTexture = new THREE.CanvasTexture(texture);
+    // @ts-ignore
     museumMap.children[1].material = new THREE.MeshStandardMaterial({
       side: THREE.DoubleSide,
       map: canvasTexture,
@@ -173,6 +168,7 @@ export const update = async ({ camera, delta }: Props) => {
   camera.rotation.y = yaw;
   camera.rotation.x = pitch;
 
+  // @ts-ignore
   canvasTexture.needsUpdate = true;
 
   // Determine forward/back/strafe
