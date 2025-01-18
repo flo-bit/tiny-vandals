@@ -41,7 +41,7 @@ export async function createTinyVandalsWall({
     await app.init({
         width,
         height,
-        background: "#ff99bb",
+        background: "#7b1c31",
     });
 
     document.body.appendChild(app.canvas);
