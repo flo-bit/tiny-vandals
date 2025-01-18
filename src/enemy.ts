@@ -1,24 +1,26 @@
 import * as PIXI from "pixi.js";
-const monster1Textures = [
+import { addDamage, nearestPainting, Painting } from "./paintings";
+import { drawDebugCircle } from "./pixi-app";
+const spiderTextures = [
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-1.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-2.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-1attack.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-2attack.png"),
 ];
-const monster2Textures = [
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-1.png"),
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-2.png"),
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-1attack.png"),
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-2attack.png"),
-];
-
-const MONSTER_WALL_PADDING = 20;
+// const monster2Textures = [
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-1.png"),
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-2.png"),
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-1attack.png"),
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-2attack.png"),
+// ];
 
 export class Enemy extends PIXI.AnimatedSprite {
     fadeFrame: number | null = null;
 
+    closestPainting: Painting | null = null;
+
     constructor(app: PIXI.Application, container: PIXI.Container) {
-        super(monster1Textures);
+        super(spiderTextures);
 
         this.loop = true;
         this.animationSpeed = 0.04;
@@ -30,8 +32,13 @@ export class Enemy extends PIXI.AnimatedSprite {
         this.scale.set(0.5);
         this.anchor.set(0.5);
 
-        this.x = app.screen.width / 2;
-        this.y = app.screen.height / 2;
+        this.x = Math.random() * app.screen.width;
+        this.y = Math.random() < 0.5 ? -50 : app.screen.height + 50;
+
+		this.zIndex = 1000;
+
+        // get closest painting
+        this.closestPainting = nearestPainting(this.x, this.y);
     }
 
     updateFrame(app: PIXI.Application) {
@@ -41,21 +48,33 @@ export class Enemy extends PIXI.AnimatedSprite {
             if (this.fadeFrame <= 0) {
                 // Spawn it somewhere else
                 this.x = Math.random() * app.screen.width;
-                this.y = Math.random() * app.screen.height;
+                this.y = Math.random() < 0.5 ? -50 : app.screen.height + 50;
                 this.fadeFrame = null;
                 this.alpha = 1;
+                this.closestPainting = null;
             }
-        } else {
-            this.x += (Math.random() - 0.5) * 2;
-            this.y += (Math.random() - 0.5) * 1;
-            this.x = Math.max(
-                MONSTER_WALL_PADDING,
-                Math.min(app.screen.width - MONSTER_WALL_PADDING, this.x),
+        } else if (this.closestPainting) {
+            const angle = Math.atan2(
+                this.closestPainting.y - this.y,
+                this.closestPainting.x - this.x,
             );
-            this.y = Math.max(
-                MONSTER_WALL_PADDING,
-                Math.min(app.screen.height - MONSTER_WALL_PADDING, this.y),
-            );
+            this.x += Math.cos(angle) * 1;
+            this.y += Math.sin(angle) * 1;
+
+            // drop painting
+			if (Math.random() < 1) {
+                let randomDist = Math.random() * 100;
+                let randomAngle = Math.random() * Math.PI * 2;
+                let rx = this.x + randomDist * Math.cos(randomAngle);
+                let ry = this.y + randomDist * Math.sin(randomAngle);
+                drawDebugCircle(rx, ry);
+
+                addDamage(rx, ry);
+            }
+        }
+
+        if (!this.closestPainting) {
+            this.closestPainting = nearestPainting(this.x, this.y);
         }
     }
 
