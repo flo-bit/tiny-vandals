@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { addDamage, nearestPainting, Painting } from "./paintings";
 import { drawDebugCircle } from "./pixi-app";
 const spiderTextures = [
-    await PIXI.Assets.load("/tiny-vandals/images/Monster1.png"),
+    await PIXI.Assets.load("/tiny-vandals/images/Monster1-1.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-2.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-1attack.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-2attack.png"),
