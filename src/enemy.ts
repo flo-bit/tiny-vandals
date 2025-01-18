@@ -7,12 +7,12 @@ const spiderTextures = [
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-1attack.png"),
     await PIXI.Assets.load("/tiny-vandals/images/Monster1-2attack.png"),
 ];
-const monster2Textures = [
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-1.png"),
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-2.png"),
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-1attack.png"),
-    await PIXI.Assets.load("/tiny-vandals/images/Monster2-2attack.png"),
-];
+// const monster2Textures = [
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-1.png"),
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-2.png"),
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-1attack.png"),
+//     await PIXI.Assets.load("/tiny-vandals/images/Monster2-2attack.png"),
+// ];
 
 export class Enemy extends PIXI.AnimatedSprite {
     fadeFrame: number | null = null;
@@ -20,7 +20,7 @@ export class Enemy extends PIXI.AnimatedSprite {
     closestPainting: Painting | null = null;
 
     constructor(app: PIXI.Application, container: PIXI.Container) {
-        super(monster1Textures);
+        super(spiderTextures);
 
         this.loop = true;
         this.animationSpeed = 0.04;
