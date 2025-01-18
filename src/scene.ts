@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { Props } from "./types";
-import { addCircle } from "./pixi-app";
+import { castRayAtTinyVandalsWall } from "./pixi-app";
 
 const keysPressed = { w: false, a: false, s: false, d: false };
 let moveSpeed = 5.0;
@@ -268,7 +268,7 @@ export const update = async ({ camera, delta }: Props) => {
                         // console.log(`Ray ${i} => uv:`, hit.uv);
                         // e.g., you could store them, paint on a texture, etc.
 
-                        addCircle(hit.uv.x, 1 - hit.uv.y);
+                        castRayAtTinyVandalsWall(hit.uv.x, 1 - hit.uv.y);
                     }
                 }
             }
