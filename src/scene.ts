@@ -34,7 +34,7 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
   // 1) Load the GLB model
   const loader = new GLTFLoader();
   try {
-    const gltf = await loader.loadAsync("/tiny-vandals/map/MuseumMapV3.glb");
+    const gltf = await loader.loadAsync("/tiny-vandals/map/MuseumMapV4.glb");
     museumMap = gltf.scene;
 
     console.log(museumMap);
