@@ -34,13 +34,13 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
   // 1) Load the GLB model
   const loader = new GLTFLoader();
   try {
-    const gltf = await loader.loadAsync("/map/MuseumMapV3.glb");
+    const gltf = await loader.loadAsync("/tiny-vandals/map/MuseumMapV3.glb");
     museumMap = gltf.scene;
 
     console.log(museumMap);
     scene.add(museumMap);
     museumMap.children[0].material = new THREE.MeshStandardMaterial({
-      color: 0x414141,
+      color: 0xf1f1f1,
       side: THREE.DoubleSide,
     });
 
@@ -67,10 +67,10 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
   }
 
   // 2) Basic lights (ambient + directional)
-  scene.add(new THREE.AmbientLight(0xffffff, 0.1));
-  let directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
-  directionalLight.position.set(1, 0, 1);
-  scene.add(directionalLight);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.01));
+  // let directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+  // directionalLight.position.set(1, 0, 1);
+  // scene.add(directionalLight);
 
   // 3) Create a spotlight that moves with the camera
   // Add the camera to the scene so children (spotlight) are rendered/moved properly
