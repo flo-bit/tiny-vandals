@@ -1,5 +1,3 @@
-import { Painting } from "./paintings";
-
 type EndcardInfo = {
     paintings: {
         name: string,
@@ -51,11 +49,13 @@ export function showEndcard(info: EndcardInfo) {
 
             <section class="signatures">
                 <div class="signature-block">
+                    <img src="/tiny-vandals/images/Signature1.png" alt="Dr. Isabella von Fröhlich's signature" class="signature-image" />
                     <div class="signature-line"></div>
                     <p>Dr. Isabella von Fröhlich</p>
                     <p class="title">Museum Director</p>
                 </div>
                 <div class="signature-block">
+                    <img src="/tiny-vandals/images/Signature2.png" alt="Marcus Weber's signature" class="signature-image" />
                     <div class="signature-line"></div>
                     <p>Marcus Weber</p>
                     <p class="title">Head of Security</p>
