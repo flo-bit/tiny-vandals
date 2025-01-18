@@ -5,9 +5,13 @@ import {
     Container,
     Renderer,
     Sprite,
+    AnimatedSprite,
 } from "pixi.js";
 
-const spiderTexture = await Assets.load("/tiny-vandals/images/Monster1.png");
+const spiderTextures = [
+    await Assets.load("/tiny-vandals/images/Monster1.png"),
+    await Assets.load("/tiny-vandals/images/Monster1-2.png")
+];
 const paintingTextures = [
     await Assets.load("/tiny-vandals/images/painting01.png"),
     await Assets.load("/tiny-vandals/images/painting02.png"),
@@ -51,8 +55,6 @@ export async function createTinyVandalsWall({
         background: "#7b1c31",
     });
 
-    document.body.appendChild(app.canvas);
-
     const container = new Container();
     container.position.set(0, height);
     container.scale.y = -1;
@@ -83,7 +85,10 @@ export async function createTinyVandalsWall({
     const enemies: Enemy[] = [];
     for (let index = 0; index < 1; index++) {
         // Create a new Sprite from an image path
-        const sprite = new Sprite(spiderTexture);
+        const sprite = new AnimatedSprite(spiderTextures, true);
+        sprite.loop = true;
+        sprite.animationSpeed = 0.04;
+        sprite.play();
 
         // Add to stage
         container.addChild(sprite);
@@ -165,6 +170,7 @@ export async function castRayAtTinyVandalsWall(
         }
         const dist = Math.sqrt((enemy.x - x) ** 2 + (enemy.y - y) ** 2);
         if (dist < 30) {
+            console.log(x, y,)
             enemy.fadeFrame = 30;
             drawDebugCircle(x, y, 0x00ff00);
         }
