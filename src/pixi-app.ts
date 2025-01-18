@@ -1,4 +1,4 @@
-import { Application, Assets, Renderer, Sprite } from "pixi.js";
+import { Application, Assets, Graphics, Renderer, Sprite } from "pixi.js";
 
 const bunnyTexture = await Assets.load("/tiny-vandals/images/spider.png");
 const paintingTextures = [
@@ -8,45 +8,54 @@ const paintingTextures = [
 ];
 
 type Painting = {
-    damage: number,
-    sprite: Sprite,
+  damage: number;
+  sprite: Sprite;
 };
 
 type Enemy = {
-    sprite: Sprite,
-    x: number,
-    y: number,
+  sprite: Sprite;
+  x: number;
+  y: number;
 };
 
 type TinyVandalsWall = {
-    app: Application<Renderer>,
-    paintings: unknown[],
-    enemies: Enemy[],
-    width: number,
-    height: number,
+  app: Application<Renderer>;
+  paintings: unknown[];
+  enemies: Enemy[];
+  width: number;
+  height: number;
+};
+
+let app: Application<Renderer> | null = null;
+
+export const addCircle = (x: number, y: number) => {
+  if (!app) return;
+  const circle = new Graphics();
+  circle.circle(x * app.screen.width, y * app.screen.height, 10).fill(0xff0000);
+  app.stage.addChild(circle);
 };
 
 export async function createTinyVandalsWall({
-  width = 2048 * 2,
-  height = 2048 * 0.05 * 2,
+  width = 2048 * 4,
+  height = 2048 * 0.05 * 4,
 }: {
   width?: number;
   height?: number;
 }): Promise<TinyVandalsWall> {
   // Create a PixiJS application.
-  const app = new Application();
+  app = new Application();
 
   // Intialize the application.
   await app.init({
     width,
     height,
-    background: "#ff99bb",
+    background: "#313131",
   });
 
   document.body.appendChild(app.canvas);
 
   const enemies: Enemy[] = [];
-  for (let index = 0; index < 4; index++) {
+  for (let index = 0; index < 1; index++) {
     // Create a new Sprite from an image path
     const bunny = new Sprite(bunnyTexture);
 

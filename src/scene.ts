@@ -1,23 +1,57 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { Props } from "./types";
+import { addCircle } from "./pixi-app";
 
-// State for movement/looking
 const keysPressed = { w: false, a: false, s: false, d: false };
 let moveSpeed = 5.0;
 let lookSpeed = 0.002;
 let yaw = 0;
 let pitch = 0;
-
-// We'll store a reference to our loaded GLB model
 let museumMap: THREE.Group | null = null;
+let canvasTexture: THREE.CanvasTexture | null = null;
+
+// For the raycasting
+const raycaster = new THREE.Raycaster();
+const maxAngle = 0.3; // how wide your random cone should be (in radians)
+
+// Helper: returns a random direction within `±maxAngle` from `baseDir`
+function getRandomDirectionInCone(
+  baseDir: THREE.Vector3,
+  up: THREE.Vector3,
+  spread: number,
+): THREE.Vector3 {
+  // Ensure baseDir is normalized
+  const newDir = baseDir.clone().normalize();
+
+  // Random horizontal & vertical offsets, in the range [-spread, spread]
+  let angleH = (Math.random() - 0.5) * 2 * spread;
+  let angleV = (Math.random() - 0.5) * 2 * spread;
+
+  // limit length of angleH, angleV to 0.1
+  let length = Math.sqrt(angleH * angleH + angleV * angleV);
+  while (length > spread) {
+    angleH = (Math.random() - 0.5) * 2 * spread;
+    angleV = (Math.random() - 0.5) * 2 * spread;
+    length = Math.sqrt(angleH * angleH + angleV * angleV);
+  }
+
+  // Rotate horizontally around the "up" vector
+  newDir.applyAxisAngle(up, angleH);
+
+  // Rotate vertically around the side-axis (perpendicular to forward & up)
+  const sideAxis = new THREE.Vector3().crossVectors(baseDir, up).normalize();
+  newDir.applyAxisAngle(sideAxis, angleV);
+
+  // Re-normalize after the slight rotation
+  newDir.normalize();
+  return newDir;
+}
 
 // Simple bounding check (must stay within |x|<5, |z|<5)
 function canMoveTo(x: number, z: number) {
   return Math.abs(x) < 9 && Math.abs(z) < 9;
 }
-
-let canvasTexture: THREE.CanvasTexture | null = null;
 
 /**
  * Setup function: loads the GLB model, adds lights, sets up camera and controls
@@ -26,19 +60,21 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
   // 1) Load the GLB model
   const loader = new GLTFLoader();
   try {
-    const gltf = await loader.loadAsync("/tiny-vandals/map/MuseumMapV4.glb");
+    const gltf = await loader.loadAsync("/tiny-vandals/map/MuseumMapV6.glb");
     museumMap = gltf.scene;
 
     console.log(museumMap);
     scene.add(museumMap);
     // @ts-ignore
     museumMap.children[0].material = new THREE.MeshStandardMaterial({
-      color: 0xf1f1f1,
+      color: 0x313131,
       side: THREE.DoubleSide,
     });
 
     // museumMap.children[0].visible = false;
     // material.map = texture;
+
+    // this is wall where we draw stuff
     // @ts-ignore
     canvasTexture = new THREE.CanvasTexture(texture);
     // @ts-ignore
@@ -62,8 +98,8 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
   }
 
   // 2) Basic lights (ambient + directional)
-  scene.add(new THREE.AmbientLight(0xffffff, 0.01));
-  // let directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+  // let directionalLight = new THREE.DirectionalLight(0xffffff, 10);
   // directionalLight.position.set(1, 0, 1);
   // scene.add(directionalLight);
 
@@ -76,7 +112,7 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
   camera.add(spotLight);
 
   const spotLightTarget = new THREE.Object3D();
-  spotLightTarget.position.set(0, 0, -10);
+  spotLightTarget.position.set(0, 0, -1);
   camera.add(spotLightTarget);
 
   spotLight.target = spotLightTarget;
@@ -168,37 +204,72 @@ export const update = async ({ camera, delta }: Props) => {
   camera.rotation.y = yaw;
   camera.rotation.x = pitch;
 
-  // @ts-ignore
-  canvasTexture.needsUpdate = true;
+  // Force update of the "canvas" texture each frame if needed
+  if (canvasTexture) {
+    canvasTexture.needsUpdate = true;
+  }
 
   // Determine forward/back/strafe
   const forward = Number(keysPressed.w) - Number(keysPressed.s);
   const strafe = Number(keysPressed.a) - Number(keysPressed.d);
 
   if (forward !== 0 || strafe !== 0) {
-    // Get camera's forward direction (ignore y so we don't fly)
+    // Move the camera (same logic as you had before) ...
     const direction = new THREE.Vector3();
     camera.getWorldDirection(direction);
     direction.y = 0;
     direction.normalize();
 
-    // Create strafe vector
     const right = new THREE.Vector3();
     right.crossVectors(direction, camera.up).normalize().multiplyScalar(-1);
 
-    // Combine movements
     let moveVector = new THREE.Vector3();
     moveVector.addScaledVector(direction, forward);
     moveVector.addScaledVector(right, strafe);
     moveVector.normalize();
     moveVector.multiplyScalar(moveSpeed * delta);
 
-    // Calculate new camera position
     const newPosition = camera.position.clone().add(moveVector);
-
-    // Check if movement is within bounding box
     if (canMoveTo(newPosition.x, newPosition.z)) {
       camera.position.copy(newPosition);
+    }
+  }
+
+  // --- New Raycasting Step ---
+  if (museumMap) {
+    // Assuming the wall is children[1] in your model:
+    const wallMesh = museumMap.children[1] as THREE.Mesh;
+    if (wallMesh) {
+      // Get the camera's forward direction
+      const forwardDir = new THREE.Vector3();
+      camera.getWorldDirection(forwardDir);
+
+      for (let i = 0; i < 8; i++) {
+        // Get a direction within ±maxAngle of forwardDir
+        const randomDir = getRandomDirectionInCone(
+          forwardDir,
+          camera.up,
+          maxAngle,
+        );
+
+        // Configure the raycaster from camera position to that direction
+        raycaster.set(camera.position, randomDir);
+
+        // Intersect against ONLY the wall mesh
+        const intersects = raycaster.intersectObject(wallMesh, false);
+
+        if (intersects.length > 0) {
+          const hit = intersects[0];
+          // hit.uv has the UV coordinate if the geometry has UVs
+          if (hit.uv) {
+            // Use or log the UV coordinates
+            // console.log(`Ray ${i} => uv:`, hit.uv);
+            // e.g., you could store them, paint on a texture, etc.
+
+            addCircle(hit.uv.x, 1 - hit.uv.y);
+          }
+        }
+      }
     }
   }
 };
