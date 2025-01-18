@@ -9,7 +9,7 @@ import { getDamagePerPainting } from "./paintings";
 const start = async () => {
     var stats = new Stats();
     stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild(stats.dom);
+    //document.body.appendChild(stats.dom);
 
     const scene = new THREE.Scene();
 
@@ -61,6 +61,9 @@ const start = async () => {
 
     const timer = document.getElementById("timer");
     console.log(timer);
+
+    const audio = new Audio("/tiny-vandals/audio/background.mp3");
+    audio.play();
 
     let itemUI = document.createElement("div");
 
