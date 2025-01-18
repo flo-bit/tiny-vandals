@@ -246,7 +246,7 @@ export const update = async ({ camera, delta }: Props) => {
             const forwardDir = new THREE.Vector3();
             camera.getWorldDirection(forwardDir);
 
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 1; i++) {
                 // Get a direction within ±maxAngle of forwardDir
                 const randomDir = getRandomDirectionInCone(
                     forwardDir,
@@ -268,7 +268,7 @@ export const update = async ({ camera, delta }: Props) => {
                         // console.log(`Ray ${i} => uv:`, hit.uv);
                         // e.g., you could store them, paint on a texture, etc.
 
-                        castRayAtTinyVandalsWall(hit.uv.x, 1 - hit.uv.y);
+                        castRayAtTinyVandalsWall(hit.uv.x, hit.uv.y);
                     }
                 }
             }
