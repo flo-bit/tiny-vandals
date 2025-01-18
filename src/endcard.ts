@@ -36,21 +36,21 @@ export function showEndcard(info: EndcardInfo) {
                             </tr>
                         `).join('')}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td><strong>Total Damages</strong></td>
-                            <td class="damage-amount"><strong>€${totalDamages.toLocaleString('de-DE')}</strong></td>
-                        </tr>
-                    </tfoot>
                 </table>
+
+                <div class="total-damages">
+                    <p>Total Estimated Damages: <strong>€${totalDamages.toLocaleString('de-DE')}</strong></p>
+                </div>
             </section>
 
             <section class="signatures">
                 <div class="signature-block">
+                    <div class="signature-line"></div>
                     <p>Dr. Isabella von Kunstmann</p>
                     <p class="title">Museum Director</p>
                 </div>
                 <div class="signature-block">
+                    <div class="signature-line"></div>
                     <p>Marcus Weber</p>
                     <p class="title">Head of Security</p>
                 </div>
@@ -98,36 +98,47 @@ export function showEndcard(info: EndcardInfo) {
 
             .damage-table th, .damage-table td {
                 padding: 0.75rem;
-                border: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
                 text-align: left;
             }
 
             .damage-table th {
-                background: #f5f5f5;
+                border-bottom: 2px solid #000;
             }
 
             .damage-amount {
                 text-align: right;
             }
 
+            .total-damages {
+                text-align: right;
+                font-size: 1.2rem;
+                margin: 2rem 0;
+                padding: 1rem 0;
+                border-top: 2px solid #000;
+            }
+
             .signatures {
                 display: flex;
-                justify-content: space-around;
+                justify-content: space-between;
                 margin-top: 4rem;
+                padding: 0 2rem;
             }
 
             .signature-block {
                 text-align: center;
-                border-top: 1px solid #000;
-                padding-top: 0.5rem;
-                width: 200px;
+                width: 40%;
             }
 
-            .signature-block p {
-                margin: 0;
+            .signature-line {
+                width: 100%;
+                height: 1px;
+                background: #000;
+                margin-bottom: 1rem;
             }
 
-            .title {
+            .signature-block .title {
+                margin-top: 0.25rem;
                 font-style: italic;
                 color: #666;
             }
