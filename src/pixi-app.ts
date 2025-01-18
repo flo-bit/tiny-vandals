@@ -1,8 +1,18 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Assets, Renderer, Sprite } from "pixi.js";
 
 const bunnyTexture = await Assets.load("https://pixijs.com/assets/bunny.png");
 
-export async function createTinyVandalsApp({width = 1024, height = 1024}: {width?: number, height?: number}) {
+type TinyVandalsWall = {
+    app: Application<Renderer>,
+    paintings: unknown[],
+    enemies: {
+        x: number,
+        y: number,
+        sprite: Sprite,
+    }[],
+};
+
+export async function createTinyVandalsWall({width = 1024, height = 1024}: {width?: number, height?: number}): Promise<TinyVandalsWall> {
     // Create a PixiJS application.
     const app = new Application();
 
@@ -20,14 +30,34 @@ export async function createTinyVandalsApp({width = 1024, height = 1024}: {width
 
     // Add to stage
     app.stage.addChild(bunny);
+    const enemy = {
+        x: 0,
+        y: 0,
+        sprite: bunny,
+    };
 
     // Center the sprite's anchor point
     bunny.anchor.set(0.5);
     bunny.scale.set(10);
 
     // Move the sprite to the center of the screen
-    bunny.x = 0;
-    bunny.y = 0;
+    bunny.x = enemy.x;
+    bunny.y = enemy.y;
 
-    return app;
+    return {
+        app,
+        paintings: [],
+        enemies: [
+            enemy,
+        ],
+    };
+}
+
+export async function updateTinyVandalsWall(app: TinyVandalsWall) {
+    for (const enemy of app.enemies) {
+        enemy.x += 1;
+        enemy.y += 1;
+        enemy.sprite.x = enemy.x;
+        enemy.sprite.y = enemy.y;
+    }
 }

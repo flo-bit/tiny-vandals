@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { setup, update } from "./scene";
-import { createTinyVandalsApp } from "./pixi-app";
+import { createTinyVandalsWall, updateTinyVandalsWall } from "./pixi-app";
 
 (async () => {
   const scene = new THREE.Scene();
@@ -47,10 +47,10 @@ import { createTinyVandalsApp } from "./pixi-app";
   cube.position.z = -2;
   scene.add(cube);
 
-  const app = await createTinyVandalsApp({});
+  const wall = await createTinyVandalsWall({});
 
   // set texture of the cube to be the pixijs canvas
-  const texture = new THREE.CanvasTexture(app.canvas);
+  const texture = new THREE.CanvasTexture(wall.app.canvas);
   material.map = texture;
 
   await setup(props);
@@ -62,6 +62,7 @@ import { createTinyVandalsApp } from "./pixi-app";
     props.total = clock.getElapsedTime();
 
     await update(props);
+    await updateTinyVandalsWall(wall);
 
     // rotate the cube
     cube.rotation.y += props.delta;
@@ -70,7 +71,7 @@ import { createTinyVandalsApp } from "./pixi-app";
     renderer.render(scene, camera);
 
     // render the pixijs canvas
-    app.render();
+    wall.app.render();
 
     texture.needsUpdate = true;
   };
@@ -81,11 +82,11 @@ import { createTinyVandalsApp } from "./pixi-app";
     if (event.key === " ") {
       if (isPixi) {
         // switch between pixijs and threejs
-        app.canvas.style.display = "none";
+        wall.app.canvas.style.display = "none";
         renderer.domElement.style.display = "block";
       } else {
         // switch between pixijs and threejs
-        app.canvas.style.display = "block";
+        wall.app.canvas.style.display = "block";
         renderer.domElement.style.display = "none";
       }
       isPixi = !isPixi;
