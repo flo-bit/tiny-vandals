@@ -1,3 +1,5 @@
+import { Painting } from "./paintings";
+
 type EndcardInfo = {
     paintings: {
         name: string,
@@ -29,12 +31,16 @@ export function showEndcard(info: EndcardInfo) {
                         </tr>
                     </thead>
                     <tbody>
-                        ${info.paintings.map(painting => `
+                        ${info.paintings.filter(painting => painting.damages !== 0)
+            .map(
+                (painting) => `
                             <tr>
                                 <td>${painting.name}</td>
-                                <td style="text-align: right">${painting.damages.toLocaleString('de-DE')}€</td>
+                                <td class="damage-amount">€${painting.damages.toLocaleString("de-DE")}</td>
                             </tr>
-                        `).join('')}
+                        `,
+            )
+            .join("")}
                     </tbody>
                 </table>
 
@@ -107,7 +113,7 @@ export function showEndcard(info: EndcardInfo) {
             .damage-table th, .damage-table td {
                 padding: 0.75rem;
                 border-bottom: 1px solid #ccc;
-                text-align: left;
+                text-align: right;
             }
 
             .damage-table th {
@@ -115,7 +121,7 @@ export function showEndcard(info: EndcardInfo) {
             }
 
             .damage-amount {
-                text-align: left;
+                text-align: right;
             }
 
             .total-damages {

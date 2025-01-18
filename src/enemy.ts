@@ -61,8 +61,17 @@ export class Enemy extends PIXI.AnimatedSprite {
             this.x += Math.cos(angle) * 1;
             this.y += Math.sin(angle) * 1;
 
+            // get distance to painting
+            const distance = Math.hypot(
+                this.x - this.closestPainting.x,
+                this.y - this.closestPainting.y,
+            );
+            if (distance < 10) {
+                this.fadeFrame = 30;
+            }
+
             // drop painting
-			if (Math.random() < 1) {
+            if (Math.random() < 1) {
                 let randomDist = Math.random() * 100;
                 let randomAngle = Math.random() * Math.PI * 2;
                 let rx = this.x + randomDist * Math.cos(randomAngle);

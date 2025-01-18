@@ -8,6 +8,8 @@ const paintingData: {
     border: number;
     borderColor?: number;
     image: string;
+    name: string;
+    price: number;
 }[] = [
     {
         x: 1000,
@@ -16,6 +18,8 @@ const paintingData: {
         height: 1087 / 2,
         border: 10,
         image: "/tiny-vandals/paintings/banksy.jpg",
+        name: "Girl with the Balloon", // Updated name
+        price: 2000000, // Rough estimate
     },
     {
         x: 3000,
@@ -24,22 +28,28 @@ const paintingData: {
         height: 512,
         border: 10,
         image: "/tiny-vandals/paintings/mondrian.jpg",
+        name: "Mondrian Composition",
+        price: 25000000, // Rough estimate
     },
     {
         x: 5000,
         y: 600,
-        width: 800,
-        height: 947,
+        width: 800 * 0.7,
+        height: 947 * 0.7,
         border: 10,
         image: "/tiny-vandals/paintings/girl-earing.jpg",
+        name: "Girl with a Pearl Earring",
+        price: 150000000, // Rough estimate
     },
     {
         x: 7000,
         y: 600,
-        width: 640,
-        height: 954,
+        width: 640 * 0.7,
+        height: 954 * 0.7,
         border: 10,
         image: "/tiny-vandals/paintings/mona-lisa.jpg.webp",
+        name: "Mona Lisa",
+        price: 850000000, // Rough estimate
     },
     {
         x: 9000,
@@ -48,6 +58,8 @@ const paintingData: {
         height: 2699 / 4,
         border: 10,
         image: "/tiny-vandals/paintings/nebelmeer.jpg",
+        name: "Wanderer above the Sea of Fog",
+        price: 75000000, // Rough estimate
     },
     {
         x: 11000,
@@ -56,14 +68,18 @@ const paintingData: {
         height: 1024 / 1.5,
         border: 10,
         image: "/tiny-vandals/paintings/scream.jpg",
+        name: "The Scream",
+        price: 120000000, // Rough estimate
     },
     {
         x: 13400,
         y: 600,
-        width: 1200,
-        height: 950,
+        width: 1200 * 0.7,
+        height: 950 * 0.7,
         border: 10,
         image: "/tiny-vandals/paintings/starry-night.jpg",
+        name: "Starry Night",
+        price: 100000000, // Rough estimate
     },
     {
         x: 15000,
@@ -72,11 +88,15 @@ const paintingData: {
         height: 251 * 2,
         border: 10,
         image: "/tiny-vandals/paintings/willie.jpg",
+        name: "Steamboat Willie", // Updated name
+        price: 500, // Rough estimate
     },
 ];
 
 export class Painting extends PIXI.Sprite {
     damage: number = 0;
+    name: string = "";
+    price: number = 0;
 }
 
 const paintings: Painting[] = [];
@@ -88,6 +108,8 @@ export const setupPaintings = async (container: PIXI.Container) => {
         sprite.y = element.y;
         sprite.width = element.width;
         sprite.height = element.height;
+        sprite.name = element.name;
+        sprite.price = element.price;
 
         sprite.anchor.set(0.5);
 
@@ -138,4 +160,23 @@ export const addDamage = (x: number, y: number) => {
             console.log(painting.damage);
         }
     }
+};
+
+export const getDamagePerPainting = () => {
+    return paintings.map((painting) => {
+        let damagePercent = 0;
+        if (painting.damage === 0) damagePercent = 0;
+        else if (painting.damage < 100) damagePercent = 0.2;
+        else if (painting.damage < 200) damagePercent = 0.4;
+        else if (painting.damage < 300) damagePercent = 0.6;
+        else if (painting.damage < 400) damagePercent = 0.8;
+        else if (painting.damage < 500) damagePercent = 1;
+
+        return {
+            name: painting.name,
+            damage: painting.damage,
+            damages: damagePercent * painting.price,
+            price: painting.price,
+        };
+    });
 };

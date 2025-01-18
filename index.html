@@ -4,8 +4,21 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>vite three scaffold</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
     </head>
     <body>
+
+        <div class="flex flex-col items-center justify-center h-screen bg-black start-screen">
+            <h1 class="text-6xl font-bold text-white">Tiny Vandals</h1>
+            <button class="mt-8 bg-red-500 text-xl font-semibold text-white px-4 py-2 rounded-md start-button">
+                Start
+            </button>
+        </div>
+
+        <div id="timer" class="fixed top-0 left-0 right-0 h-2 w-full flex z-50"></div>
+
+
         <script type="module" src="/src/main.ts"></script>
     </body>
 </html>
