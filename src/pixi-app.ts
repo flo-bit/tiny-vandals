@@ -1,4 +1,11 @@
-import { Application, Assets, Container, Renderer, Sprite } from "pixi.js";
+import {
+    Application,
+    Assets,
+    Graphics,
+    Container,
+    Renderer,
+    Sprite,
+} from "pixi.js";
 
 const spiderTexture = await Assets.load("/tiny-vandals/images/Monster1.png");
 const paintingTextures = [
@@ -8,23 +15,34 @@ const paintingTextures = [
 ];
 
 type Painting = {
-    damage: number,
-    sprite: Sprite,
+    damage: number;
+    sprite: Sprite;
 };
 
 type Enemy = {
-    fadeFrame: number | null,
-    sprite: Sprite,
-    x: number,
-    y: number,
+    fadeFrame: number | null;
+    sprite: Sprite;
+    x: number;
+    y: number;
 };
 
 type TinyVandalsWall = {
-    app: Application<Renderer>,
-    paintings: unknown[],
-    enemies: Enemy[],
-    width: number,
-    height: number,
+    app: Application<Renderer>;
+    paintings: unknown[];
+    enemies: Enemy[];
+    width: number;
+    height: number;
+};
+
+let app: Application<Renderer> | null = null;
+
+export const addCircle = (x: number, y: number) => {
+    if (!app) return;
+    const circle = new Graphics();
+    circle
+        .circle(x * app.screen.width, y * app.screen.height, 10)
+        .fill(0xff0000);
+    app.stage.addChild(circle);
 };
 
 export async function createTinyVandalsWall({
@@ -35,7 +53,7 @@ export async function createTinyVandalsWall({
     height?: number;
 }): Promise<TinyVandalsWall> {
     // Create a PixiJS application.
-    const app = new Application();
+    app = new Application();
 
     // Intialize the application.
     await app.init({
@@ -120,7 +138,12 @@ export async function updateTinyVandalsWall(app: TinyVandalsWall) {
 /**
  * This will scare the enemy and make it go away.
  */
-export async function castRayAtTinyVandalsWall(app: TinyVandalsWall, x: number, y: number, intensity = 1) {
+export async function castRayAtTinyVandalsWall(
+    app: TinyVandalsWall,
+    x: number,
+    y: number,
+    intensity = 1,
+) {
     for (const enemy of app.enemies) {
         if (enemy.fadeFrame === null) {
             continue;
