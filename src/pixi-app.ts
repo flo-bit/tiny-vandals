@@ -50,6 +50,28 @@ export async function createTinyVandalsWall({
     container.scale.y = -1;
     app.stage.addChild(container);
 
+    const paintings: Painting[] = [];
+    for (let index = 0; index < 3; index++) {
+        // Create a new Sprite from an image path
+        const sprite = new Sprite(paintingTextures[index]);
+
+        // Add to stage
+        container.addChild(sprite);
+        const painting = {
+            damage: 0,
+            sprite,
+        };
+
+        // Center the sprite's anchor point
+        sprite.anchor.set(0.5);
+        sprite.scale.set(0.6);
+
+        // Move the sprite to the center of the screen
+        sprite.x = (width / 4) * index + 300;
+        sprite.y = height / 2;
+        paintings.push(painting);
+    }
+
     const enemies: Enemy[] = [];
     for (let index = 0; index < 4; index++) {
         // Create a new Sprite from an image path
@@ -73,28 +95,6 @@ export async function createTinyVandalsWall({
         enemies.push(enemy);
     }
 
-    const paintings: Painting[] = [];
-    for (let index = 0; index < 3; index++) {
-        // Create a new Sprite from an image path
-        const sprite = new Sprite(paintingTextures[index]);
-
-        // Add to stage
-        container.addChild(sprite);
-        const painting = {
-            damage: 0,
-            sprite,
-        };
-
-        // Center the sprite's anchor point
-        sprite.anchor.set(0.5);
-        sprite.scale.set(0.6);
-
-        // Move the sprite to the center of the screen
-        sprite.x = (width / 4) * index + 150;
-        sprite.y = height / 2;
-        paintings.push(painting);
-    }
-
     return {
         app,
         paintings,
@@ -106,8 +106,8 @@ export async function createTinyVandalsWall({
 
 export async function updateTinyVandalsWall(app: TinyVandalsWall) {
     for (const enemy of app.enemies) {
-        enemy.x += (Math.random() - 0.5) * 2;
-        enemy.y += (Math.random() - 0.5) * 2;
+        enemy.x += (Math.random() - 0.5) * 30;
+        enemy.y += (Math.random() - 0.5) * 15;
         enemy.x = Math.max(0, Math.min(app.width, enemy.x));
         enemy.y = Math.max(0, Math.min(app.height, enemy.y));
         enemy.sprite.x = enemy.x;
