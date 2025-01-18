@@ -61,16 +61,27 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
     const loader = new GLTFLoader();
     try {
         const gltf = await loader.loadAsync(
-            "/tiny-vandals/map/MuseumMapV7.glb",
+            "/tiny-vandals/map/MuseumMapV11.glb",
         );
         museumMap = gltf.scene;
 
         console.log(museumMap);
         scene.add(museumMap);
+
+        // load texture atlas
+
+        const textureAtlas = new THREE.TextureLoader().load(
+            "/tiny-vandals/map/textureatlas.png",
+        );
+
+        textureAtlas.flipY = false;
+        textureAtlas.repeat.set(1, 1);
+        textureAtlas.colorSpace = THREE.SRGBColorSpace;
+
         // @ts-ignore
         museumMap.children[0].material = new THREE.MeshStandardMaterial({
-            color: 0x313131,
             side: THREE.DoubleSide,
+            map: textureAtlas,
         });
 
         // museumMap.children[0].visible = false;
@@ -100,7 +111,7 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
     }
 
     // 2) Basic lights (ambient + directional)
-    scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.2));
     // let directionalLight = new THREE.DirectionalLight(0xffffff, 10);
     // directionalLight.position.set(1, 0, 1);
     // scene.add(directionalLight);

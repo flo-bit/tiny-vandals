@@ -51,7 +51,8 @@ export async function updateTinyVandalsWall(wall: TinyVandalsWall) {
 export const drawDebugCircle = (x: number, y: number, color?: number) => {
     if (!wall) return;
     const circle = new Graphics();
-    circle.circle(x, wall.app.screen.height - y, 10).fill(color ?? 0xff0000);
+    circle.circle(x, wall.app.screen.height - y, 5).fill(color ?? 0xffff00);
+    circle.zIndex = 10;
     wall.app.stage.addChild(circle);
 };
 

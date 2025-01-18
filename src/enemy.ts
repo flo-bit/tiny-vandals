@@ -35,6 +35,8 @@ export class Enemy extends PIXI.AnimatedSprite {
         this.x = Math.random() * app.screen.width;
         this.y = Math.random() < 0.5 ? -50 : app.screen.height + 50;
 
+		this.zIndex = 1000;
+
         // get closest painting
         this.closestPainting = nearestPainting(this.x, this.y);
     }
@@ -60,9 +62,15 @@ export class Enemy extends PIXI.AnimatedSprite {
             this.y += Math.sin(angle) * 1;
 
             // drop painting
-            drawDebugCircle(this.x, this.y);
+			if (Math.random() < 1) {
+                let randomDist = Math.random() * 100;
+                let randomAngle = Math.random() * Math.PI * 2;
+                let rx = this.x + randomDist * Math.cos(randomAngle);
+                let ry = this.y + randomDist * Math.sin(randomAngle);
+                drawDebugCircle(rx, ry);
 
-            addDamage(this.x, this.y);
+                addDamage(rx, ry);
+            }
         }
 
         if (!this.closestPainting) {
