@@ -2,14 +2,16 @@ import { Application, Assets, Renderer, Sprite } from "pixi.js";
 
 const bunnyTexture = await Assets.load("https://pixijs.com/assets/bunny.png");
 
+type Enemy = {
+    sprite: Sprite,
+    x: number,
+    y: number,
+};
+
 type TinyVandalsWall = {
     app: Application<Renderer>,
     paintings: unknown[],
-    enemies: {
-        x: number,
-        y: number,
-        sprite: Sprite,
-    }[],
+    enemies: Enemy[],
 };
 
 export async function createTinyVandalsWall({width = 1024, height = 1024}: {width?: number, height?: number}): Promise<TinyVandalsWall> {
@@ -25,38 +27,41 @@ export async function createTinyVandalsWall({width = 1024, height = 1024}: {widt
 
     document.body.appendChild(app.canvas);
 
-    // Create a new Sprite from an image path
-    const bunny = new Sprite(bunnyTexture);
+    const enemies: Enemy[] = [];
 
-    // Add to stage
-    app.stage.addChild(bunny);
-    const enemy = {
-        x: 0,
-        y: 0,
-        sprite: bunny,
-    };
+    for (let index = 0; index < 4; index++) {
+        // Create a new Sprite from an image path
+        const bunny = new Sprite(bunnyTexture);
 
-    // Center the sprite's anchor point
-    bunny.anchor.set(0.5);
-    bunny.scale.set(10);
+        // Add to stage
+        app.stage.addChild(bunny);
+        const enemy = {
+            x: width / 2,
+            y: height / 2,
+            sprite: bunny,
+        };
 
-    // Move the sprite to the center of the screen
-    bunny.x = enemy.x;
-    bunny.y = enemy.y;
+        // Center the sprite's anchor point
+        bunny.anchor.set(0.5);
+        bunny.scale.set(10);
+
+        // Move the sprite to the center of the screen
+        bunny.x = enemy.x;
+        bunny.y = enemy.y;
+        enemies.push(enemy);
+    }
 
     return {
         app,
         paintings: [],
-        enemies: [
-            enemy,
-        ],
+        enemies,
     };
 }
 
 export async function updateTinyVandalsWall(app: TinyVandalsWall) {
     for (const enemy of app.enemies) {
-        enemy.x += 1;
-        enemy.y += 1;
+        enemy.x += (Math.random() - 0.5) * 20;
+        enemy.y += (Math.random() - 0.5) * 20;
         enemy.sprite.x = enemy.x;
         enemy.sprite.y = enemy.y;
     }
