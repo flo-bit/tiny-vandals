@@ -29,17 +29,21 @@ export function showEndcard(info: EndcardInfo) {
                         </tr>
                     </thead>
                     <tbody>
-                        ${info.paintings.map(painting => `
+                        ${info.paintings
+                            .map(
+                                (painting) => `
                             <tr>
                                 <td>${painting.name}</td>
-                                <td class="damage-amount">€${painting.damages.toLocaleString('de-DE')}</td>
+                                <td class="damage-amount">€${painting.damages.toLocaleString("de-DE")}</td>
                             </tr>
-                        `).join('')}
+                        `,
+                            )
+                            .join("")}
                     </tbody>
                     <tfoot>
                         <tr>
                             <td><strong>Total Damages</strong></td>
-                            <td class="damage-amount"><strong>€${totalDamages.toLocaleString('de-DE')}</strong></td>
+                            <td class="damage-amount"><strong>€${totalDamages.toLocaleString("de-DE")}</strong></td>
                         </tr>
                     </tfoot>
                 </table>

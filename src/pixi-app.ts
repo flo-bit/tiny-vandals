@@ -33,7 +33,10 @@ export async function createTinyVandalsWall({
 
     await setupPaintings(container);
 
-    const enemies: Enemy[] = [new Enemy(app, container)];
+    const enemies: Enemy[] = [
+        new Enemy(app, container),
+        new Enemy(app, container),
+    ];
 
     wall = {
         app,

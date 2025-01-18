@@ -61,7 +61,7 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
     const loader = new GLTFLoader();
     try {
         const gltf = await loader.loadAsync(
-            "/tiny-vandals/map/MuseumMapV11.glb",
+            "/tiny-vandals/map/MuseumMapV13.glb",
         );
         museumMap = gltf.scene;
 
@@ -96,12 +96,11 @@ export const setup = async ({ scene, camera, renderer, texture }: Props) => {
             map: canvasTexture,
         });
 
-        // make everything double sided
-        museumMap.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-                child.material.side = THREE.DoubleSide;
-            }
-        });
+        for (let i = 2; i < museumMap.children.length; i++) {
+            // add a light here
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            museumMap.children[i].add(light);
+        }
 
         // Optional: scale or position your museum map if needed, for example:
         // museumMap.scale.set(1, 1, 1);

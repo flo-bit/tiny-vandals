@@ -4,8 +4,9 @@ import { createTinyVandalsWall, updateTinyVandalsWall } from "./pixi-app";
 import { Props } from "./types";
 import Stats from "stats.js";
 import { showEndcard } from "./endcard";
+import { getDamagePerPainting } from "./paintings";
 
-(async () => {
+const start = async () => {
     var stats = new Stats();
     stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild(stats.dom);
@@ -58,6 +59,20 @@ import { showEndcard } from "./endcard";
     renderer.outputColorSpace = THREE.SRGBColorSpace; // optional with post-processing
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
+    const timer = document.getElementById("timer");
+    console.log(timer);
+
+    let itemUI = document.createElement("div");
+
+    itemUI.classList.add(
+        "h-full",
+        "transition-all",
+        "duration-200",
+        "bg-red-500",
+    );
+    // set width to percentage dwv
+    itemUI.style.width = "100px";
+    if (timer) timer.appendChild(itemUI);
     const animate = async () => {
         stats.begin();
 
@@ -77,7 +92,22 @@ import { showEndcard } from "./endcard";
 
         stats.end();
 
-        requestAnimationFrame(animate);
+        console.log(props.total);
+        if (props.total > 60) {
+            console.log("showing endcard");
+            showEndcard({
+                paintings: getDamagePerPainting(),
+            });
+
+            // remove threejs canvas
+            renderer.domElement.style.display = "none";
+        } else {
+            requestAnimationFrame(animate);
+        }
+
+        if (timer) {
+            itemUI.style.width = `${(props.total / 60) * 100}%`;
+        }
     };
 
     let isPixi = true;
@@ -98,15 +128,13 @@ import { showEndcard } from "./endcard";
     });
 
     animate();
-})();
+};
 
-setTimeout(() => {
-    showEndcard({
-        paintings: [
-            {
-                name: "The Starry Night",
-                damages: 1000000,
-            },
-        ],
-    });
-}, 1000);
+const startButton = document.querySelector(".start-button");
+
+const startScreen = document.querySelector(".start-screen");
+startButton?.addEventListener("click", () => {
+    startScreen?.classList.add("hidden");
+    start();
+});
+
