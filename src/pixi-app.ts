@@ -1,10 +1,10 @@
 import { Application, Assets, Renderer, Sprite } from "pixi.js";
 
-const bunnyTexture = await Assets.load("/images/spider.png");
+const bunnyTexture = await Assets.load("/tiny-vandals/images/spider.png");
 const paintingTextures = [
-    await Assets.load("/images/painting01.png"),
-    await Assets.load("/images/painting02.png"),
-    await Assets.load("/images/painting03.png"),
+  await Assets.load("/tiny-vandals/images/painting01.png"),
+  await Assets.load("/tiny-vandals/images/painting02.png"),
+  await Assets.load("/tiny-vandals/images/painting03.png"),
 ];
 
 type Painting = {
